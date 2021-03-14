@@ -55,9 +55,18 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.11.2
+    configs:
+      - source: filebeat_config
+        target: /usr/share/filebeat/config/filebeat.yml
+    networks:
+      - elk
+    deploy:
+      mode: replicated
+      replicas: 1
 
 configs:
-
   elastic_config:
     file: ./elasticsearch/config/elasticsearch.yml
   logstash_config:
@@ -66,6 +75,8 @@ configs:
     file: ./logstash/pipeline/logstash.conf
   kibana_config:
     file: ./kibana/config/kibana.yml
+  filebeat_config:
+    file: ./filebeat/config/filebeat.yml
 
 networks:
   elk:
